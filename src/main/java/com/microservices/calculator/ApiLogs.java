@@ -2,6 +2,7 @@ package com.microservices.calculator;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.corp.calculator.TracerImpl;
 import org.apache.logging.log4j.LogManager;
 import org.aspectj.lang.JoinPoint;
 import org.aspectj.lang.annotation.*;
@@ -10,6 +11,8 @@ import org.springframework.stereotype.Component;
 @Component
 @Aspect
 public class ApiLogs {
+
+    private TracerImpl tracerImpl = new TracerImpl();
 
     @Pointcut("@within(org.springframework.web.bind.annotation.RestController)")
     public void allResources() {
@@ -41,6 +44,7 @@ public class ApiLogs {
             log = log.substring(0, 1000) + ".... (+" + log.length() + " characters)";
         }
         LogManager.getLogger(jp.getSignature().getDeclaringTypeName()).info(log);
+        tracerImpl.trace(log);
     }
 
     @AfterThrowing(pointcut = "allResources()", throwing = "exception")
@@ -48,6 +52,7 @@ public class ApiLogs {
         String log = "<<< Return Exception << " + jp.getSignature().getName() + ": "
                 + exception.getClass().getSimpleName() + "->" + exception.getMessage();
         LogManager.getLogger(jp.getSignature().getDeclaringTypeName()).info(log);
+        tracerImpl.trace(log);
     }
 
 }

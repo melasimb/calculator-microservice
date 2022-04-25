@@ -49,6 +49,30 @@
 			<artifactId>spring-boot-starter-webflux</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>tracer-1.0.0.jar</groupId>
+			<artifactId>tracer-1.0.0.jar</artifactId>
+			<scope>system</scope>
+			<version>1.0.0</version>
+			<systemPath>${basedir}\lib\tracer-1.0.0.jar</systemPath>
+		</dependency>
+
+		<dependency>
+			<groupId>tracer-1.0.0-javadoc.jar</groupId>
+			<artifactId>tracer-1.0.0-javadoc.jar</artifactId>
+			<scope>system</scope>
+			<version>1.0.0</version>
+			<systemPath>${basedir}\lib\tracer-1.0.0-javadoc.jar</systemPath>
+		</dependency>
+
+		<dependency>
+			<groupId>tracer-1.0.0-sources.jar</groupId>
+			<artifactId>tracer-1.0.0-sources.jar</artifactId>
+			<scope>system</scope>
+			<version>1.0.0</version>
+			<systemPath>${basedir}\lib\tracer-1.0.0-sources.jar</systemPath>
+		</dependency>
+
 		<!-- ================ TEST =========================================== -->
 		<!-- JUnit5 -->
 		<dependency>
