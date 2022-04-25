@@ -53,6 +53,14 @@ public class OperationDto {
         }
     }
 
+    public void validateDto() {
+        if (firstNumber == null || secondNumber == null || operator == null || operator.isEmpty()) {
+            throw new BadRequestException("Incomplete OperationDto. ");
+        } else if (!operator.equals("add") && !operator.equals("subtract")) {
+            throw new BadRequestException("operator is incorrect, valid operators are add and subtract");
+        }
+    }
+
     @Override
     public String toString() {
         return "OperationDto{" +
