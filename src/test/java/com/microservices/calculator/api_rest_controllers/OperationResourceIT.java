@@ -107,4 +107,76 @@ public class OperationResourceIT {
                 .exchange()
                 .expectStatus().isEqualTo(HttpStatus.NOT_FOUND);
     }
+
+    @Test
+    void testAdd() {
+        ResultDto resultDto = this.webTestClient
+                .get().uri(uriBuilder ->
+                        uriBuilder.path(OperationResource.OPERATIONS + OperationResource.ADD)
+                                .queryParam("firstNumber", 2.5)
+                                .queryParam("secondNumber", 3)
+                                .build())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(ResultDto.class)
+                .returnResult().getResponseBody();
+        assertEquals(new BigDecimal(5.5), resultDto.getResult());
+    }
+
+    @Test
+    void testSubtract() {
+        ResultDto resultDto = this.webTestClient
+                .get().uri(uriBuilder ->
+                        uriBuilder.path(OperationResource.OPERATIONS + OperationResource.SUBTRACT)
+                                .queryParam("firstNumber", 2.5)
+                                .queryParam("secondNumber", 3)
+                                .build())
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(ResultDto.class)
+                .returnResult().getResponseBody();
+        assertEquals(new BigDecimal(-0.5), resultDto.getResult());
+    }
+
+    @Test
+    void testAddIncorrectTypeQueryParam() {
+        this.webTestClient
+                .get().uri(uriBuilder -> uriBuilder.path(OperationResource.OPERATIONS + OperationResource.ADD)
+                .queryParam("firstNumber", "three")
+                .queryParam("secondNumber", 5)
+                .build())
+                .exchange()
+                .expectStatus().isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    void testAddIncompleteQueryParam() {
+        this.webTestClient
+                .get().uri(uriBuilder -> uriBuilder.path(OperationResource.OPERATIONS + OperationResource.CALCULATE)
+                .queryParam("firstNumber", 5)
+                .build())
+                .exchange()
+                .expectStatus().isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    void testSubtractIncorrectTypeQueryParam() {
+        this.webTestClient
+                .get().uri(uriBuilder -> uriBuilder.path(OperationResource.OPERATIONS + OperationResource.SUBTRACT)
+                .queryParam("firstNumber", "three")
+                .queryParam("secondNumber", 5)
+                .build())
+                .exchange()
+                .expectStatus().isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    void testSubtractIncompleteQueryParam() {
+        this.webTestClient
+                .get().uri(uriBuilder -> uriBuilder.path(OperationResource.OPERATIONS + OperationResource.SUBTRACT)
+                .queryParam("firstNumber", 5)
+                .build())
+                .exchange()
+                .expectStatus().isEqualTo(HttpStatus.BAD_REQUEST);
+    }
 }

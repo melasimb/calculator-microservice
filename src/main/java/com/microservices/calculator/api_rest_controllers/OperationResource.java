@@ -16,6 +16,8 @@ import java.math.BigDecimal;
 public class OperationResource {
     static final String OPERATIONS = "/operations";
     static final String CALCULATE = "/calculate";
+    static final String ADD = "/add";
+    static final String SUBTRACT = "/subtract";
 
     private OperationBusinessController operationBusinessController;
 
@@ -28,6 +30,18 @@ public class OperationResource {
     public ResultDto calculate(@RequestParam BigDecimal firstNumber, @RequestParam BigDecimal secondNumber, @RequestParam String operator) {
         OperationDto operationDto = new OperationDto(firstNumber, secondNumber, operator);
         operationDto.validate();
+        return this.operationBusinessController.calculate(operationDto);
+    }
+
+    @GetMapping(value = ADD)
+    public ResultDto add(@RequestParam BigDecimal firstNumber, @RequestParam BigDecimal secondNumber) {
+        OperationDto operationDto = new OperationDto(firstNumber, secondNumber, "add");
+        return this.operationBusinessController.calculate(operationDto);
+    }
+
+    @GetMapping(value = SUBTRACT)
+    public ResultDto subtract(@RequestParam BigDecimal firstNumber, @RequestParam BigDecimal secondNumber) {
+        OperationDto operationDto = new OperationDto(firstNumber, secondNumber, "subtract");
         return this.operationBusinessController.calculate(operationDto);
     }
 }
