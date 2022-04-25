@@ -1,6 +1,7 @@
 package com.microservices.calculator.api_rest_controllers;
 
 import com.microservices.calculator.ApiTestConfig;
+import com.microservices.calculator.dtos.OperationDto;
 import com.microservices.calculator.dtos.ResultDto;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,6 +177,51 @@ public class OperationResourceIT {
                 .get().uri(uriBuilder -> uriBuilder.path(OperationResource.OPERATIONS + OperationResource.SUBTRACT)
                 .queryParam("firstNumber", 5)
                 .build())
+                .exchange()
+                .expectStatus().isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    void testOperationOperatorAdd() {
+        OperationDto operationDto = new OperationDto( new BigDecimal(5), new BigDecimal(4), "add");
+        ResultDto resultDto = this.webTestClient
+                .post().uri(OperationResource.OPERATIONS)
+                .bodyValue(operationDto)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(ResultDto.class).returnResult().getResponseBody();
+        assertEquals(new BigDecimal(9), resultDto.getResult());
+    }
+
+    @Test
+    void testOperationOperatorSubtract() {
+        OperationDto operationDto = new OperationDto( new BigDecimal(5), new BigDecimal(4), "subtract");
+        ResultDto resultDto = this.webTestClient
+                .post().uri(OperationResource.OPERATIONS)
+                .bodyValue(operationDto)
+                .exchange()
+                .expectStatus().isOk()
+                .expectBody(ResultDto.class).returnResult().getResponseBody();
+        assertEquals(new BigDecimal(1), resultDto.getResult());
+    }
+
+
+    @Test
+    void testOperationOperatorIncorrect() {
+        OperationDto operationDto = new OperationDto( new BigDecimal(5), new BigDecimal(4), "addd");
+        this.webTestClient
+                .post().uri(OperationResource.OPERATIONS)
+                .bodyValue(operationDto)
+                .exchange()
+                .expectStatus().isEqualTo(HttpStatus.BAD_REQUEST);
+    }
+
+    @Test
+    void testOperationDtoIncorrect() {
+        OperationDto operationDto = new OperationDto( new BigDecimal(5), null, "subtract");
+        this.webTestClient
+                .post().uri(OperationResource.OPERATIONS)
+                .bodyValue(operationDto)
                 .exchange()
                 .expectStatus().isEqualTo(HttpStatus.BAD_REQUEST);
     }
