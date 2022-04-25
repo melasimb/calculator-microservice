@@ -17,6 +17,10 @@ public class OperationDto {
         this.operator = operator;
     }
 
+    public OperationDto() {
+        // Empty for framework
+    }
+
     public BigDecimal getFirstNumber() {
         return firstNumber;
     }
