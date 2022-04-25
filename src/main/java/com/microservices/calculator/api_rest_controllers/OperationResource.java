@@ -4,10 +4,7 @@ import com.microservices.calculator.business_controllers.OperationBusinessContro
 import com.microservices.calculator.dtos.OperationDto;
 import com.microservices.calculator.dtos.ResultDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.math.BigDecimal;
 
@@ -42,6 +39,12 @@ public class OperationResource {
     @GetMapping(value = SUBTRACT)
     public ResultDto subtract(@RequestParam BigDecimal firstNumber, @RequestParam BigDecimal secondNumber) {
         OperationDto operationDto = new OperationDto(firstNumber, secondNumber, "subtract");
+        return this.operationBusinessController.calculate(operationDto);
+    }
+
+    @PostMapping
+    public ResultDto create(@RequestBody OperationDto operationDto) {
+        operationDto.validateDto();
         return this.operationBusinessController.calculate(operationDto);
     }
 }
